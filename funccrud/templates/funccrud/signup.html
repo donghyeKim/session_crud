@@ -1,24 +1,43 @@
-{% block content %}
 
-<h1>회원가입</h1>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CRUD</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand"  style="color: white" >Like Lion</a>
+        </div>
+    </nav>
+    <div class="container jumbotron">
+            {% block content %}
 
-<form method="POST" action="{% url 'signup'%}">
-
-{% csrf_token %}
-Username:
-<br>
-<input name="username"  type="text" value="">
-<br>
-Password:
-<br>
-<input name="password1"  type="password" value="">
-<br>
-Confirm Password:
-<br>
-<input name="password2"  type="password" value="">
-<br>
-<br>
-<input type="submit" value="Sign Up!">
-</form>
-
-{% endblock %}
+            <h1>회원가입</h1>
+            
+            <form method="POST" action="{% url 'signup'%}">
+            
+            {% csrf_token %}
+            Username:
+            <br>
+            <input name="username"  type="text" value="">
+            <br>
+            Password:
+            <br>
+            <input name="password1"  type="password" value="">
+            <br>
+            Confirm Password:
+            <br>
+            <input name="password2"  type="password" value="">
+            <br>
+            <br>
+            <input type="submit" value="Sign Up!">
+            </form>
+            
+            {% endblock %}
+    </div>
+</body>
