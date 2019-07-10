@@ -15,6 +15,9 @@ class Blog(models.Model):
     def __str__(self):
         return self.title
 
+    def summary(self):
+        return self.body[:100]
+
 class Comment(models.Model):
     post = models.ForeignKey('funccrud.Blog', related_name='comments', on_delete=models.CASCADE)
     author = models.CharField(max_length=200)

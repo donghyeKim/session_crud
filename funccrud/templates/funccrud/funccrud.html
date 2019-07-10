@@ -8,11 +8,12 @@
     {% if user.is_authenticated %}
     <a href="{% url 'newblog' %}">글쓰기</a>
     {% endif %}
-    {% for blog in blogs %}
+    {% for blog in posts %}
         <h2>{{blog.title}}</h2>
         <h3>{{blog.author}}</h3>
         <h5>{{blog.created_date}}</h5>
-        <p>{{blog.body}}</p>
+        <p>{{blog.summary}}</p>
+        <a href="{%url 'detail' blog.id%}" class="card-link">...more</a>
         <p>댓글 수 : {{blog.comments.count}}</p>
         <a href="{% url 'update' blog.id %}">수정</a>
         <a href="{% url 'delete' blog.id %}">삭제</a>
@@ -30,5 +31,18 @@
         <br>
         <br>
     {% endfor %}
+    {%if posts.has_previous%}
+    <a href="?page=1">First</a>
+    <a href="?page={{posts.previous_page_number}}">Previous</a>
+    {%endif%}
+
+    <span>{{posts.number}}</span>
+    <span>of</span>
+    <span>{{posts.paginator.num_pages}}</span>
+
+    {%if posts.has_next%}
+    <a href="?page={{posts.next_page_number}}">Next</a>
+    <a href="?page={{posts.paginator.num_pages}}">Last</a>
+    {%endif%}
 </body>
 </html>

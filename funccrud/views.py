@@ -5,7 +5,7 @@ from .forms import NewBlog, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import auth
-
+from django.core.paginator import Paginator
 
 def add_comment(request, pk):
     blog = get_object_or_404(Blog, pk=pk)
@@ -49,8 +49,12 @@ def logout(request):
     return redirect('home')
 
 def read(request):
-    blogs = Blog.objects.all()
-    return render(request, 'funccrud/funccrud.html', {'blogs':blogs})
+    blogs = Blog.objects
+    blog_list = Blog.objects.all()
+    paginator = Paginator(blog_list,3)
+    page = request.GET.get('page')
+    posts = paginator.get_page(page)
+    return render(request, 'funccrud/funccrud.html', {'blogs':blogs, 'posts':posts})
 
 @login_required(login_url='/login/')
 def create(request):
@@ -82,3 +86,8 @@ def delete(request, pk):
     blog = get_object_or_404(Blog, pk = pk)
     blog.delete()
     return redirect('home')
+    
+def detail(request, pk):
+    blog_detail = get_object_or_404(Blog, pk=pk)
+    return render(request, 'funccrud/detail.html', {'blog': blog_detail})
+
