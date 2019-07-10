@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-from .models import Blog
+from .models import Blog, Comment
 from .forms import NewBlog, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -73,13 +73,15 @@ def create(request):
 @login_required(login_url='/login/')
 def update(request, pk):
     blog = get_object_or_404(Blog, pk = pk)
-    form = NewBlog(request.POST, instance=blog)
+    if request.method == 'POST':
+        form = NewBlog(request.POST, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = NewBlog(instance=blog)
+        return render(request, 'funccrud/new.html', {'form':form})
 
-    if form.is_valid():
-        form.save()
-        return redirect('home')
-
-    return render(request, 'funccrud/new.html', {'form':form})
 
 @login_required(login_url='/login/')
 def delete(request, pk):
@@ -90,4 +92,22 @@ def delete(request, pk):
 def detail(request, pk):
     blog_detail = get_object_or_404(Blog, pk=pk)
     return render(request, 'funccrud/detail.html', {'blog': blog_detail})
+
+@login_required(login_url='/login/')
+def delete_comment(request, pk):
+    comment = get_object_or_404(Comment, pk = pk)
+    comment.delete()
+    return redirect('home')    
+
+@login_required(login_url='/login/')
+def update_comment(request, pk):
+    comment = get_object_or_404(Comment, pk = pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = CommentForm(instance=comment)
+        return render(request, 'funccrud/add_comment.html', {'form':form})
 
